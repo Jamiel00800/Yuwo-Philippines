@@ -1,11 +1,440 @@
-<script setup>import {RouterLink} from 'vue-router';import {ArrowRight,ShieldCheck,Truck,HeartHandshake,Ruler,Check} from 'lucide-vue-next';import ProductCard from '../components/ProductCard.vue';import FAQ from '../components/FAQ.vue';import {products,articles,faqs} from '../data/store';const featured=products.slice(0,4);const reviews=[['“Salamat. Ganda ng sink e. Lakas makamayaman.”','Contractor from Isabela'],['“Ang ganda po ng sink and faucet, high quality ❤️”','Homeowner, Joan from Metro Manila'],['“Sobrang ganda pang yayamanin hehe sisipagin ka talaga maghugas.”','Homeowner, Darwin from Bacoor Cavite']]</script>
-<template><section class="hero"><div class="hero-copy"><div class="eyebrow light-eyebrow"><span></span> MADE FOR FILIPINO FAMILIES</div><h1>Perfect for your<br><em>dream kitchen.</em></h1><p>Thoughtfully designed workstation sinks that make every kitchen feel more spacious, functional and beautiful.</p><div class="hero-actions"><RouterLink to="/collections/all" class="btn gold">Shop sink sets <ArrowRight :size="17"/></RouterLink><a href="https://m.me/" class="btn ghost">Ask us on Messenger</a></div><div class="hero-trust"><span><Check/> Real 304 stainless steel</span><span><Check/> Anti-scratch finish</span><span><Check/> Lifetime after-sales support</span></div></div><div class="hero-visual"><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=90" alt="Modern kitchen with stainless sink"><div class="hero-stamp"><b>YUWO</b><span>EUROPEAN TECHNOLOGY</span><small>Quality for everyday living</small></div></div></section>
-<section class="trust-strip"><div><ShieldCheck/><b>Real 304 stainless steel</b><small>Brand-new quality material</small></div><div><Ruler/><b>Made to fit your space</b><small>Multiple sizes available</small></div><div><Truck/><b>Nationwide delivery</b><small>We confirm your delivery fee</small></div><div><HeartHandshake/><b>After-sales support</b><small>Here when you need us</small></div></section>
-<section class="section container"><div class="section-heading"><div><div class="eyebrow">REAL KITCHENS, REAL CUSTOMERS</div><h2>Made for the heart<br>of your home.</h2></div><p>From the first rinse to the last dish, make everyday kitchen moments a little better.</p></div><div class="review-grid"><article v-for="(r,i) in reviews" :key="r[1]" class="review-card"><div class="stars">★★★★★</div><blockquote>{{r[0]}}</blockquote><small>{{r[1]}}</small><span class="review-no">0{{i+1}}</span></article></div></section>
-<section class="section compare-section"><div class="container"><div class="center-heading"><div class="eyebrow">FIND YOUR FIT</div><h2>Undermount or topmount?</h2><p>Both are good choices. It depends on the look you like and your counter.</p></div><div class="compare-grid"><article><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85" alt="Undermount kitchen sink"><div><span class="eyebrow">CLEAN & SEAMLESS</span><h3>Undermount</h3><p>The sink sits under the counter for a smooth, uninterrupted look.</p><ul><li>Wipe crumbs straight into the sink</li><li>Clean, seamless counter edge</li><li>Countertop needs a fitted cut-out</li></ul></div></article><article><img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1000&q=85" alt="Topmount kitchen sink"><div><span class="eyebrow">EASY & PRACTICAL</span><h3>Topmount</h3><p>The sink sits on top of the counter for a classic, practical fit.</p><ul><li>Faucet and soap holes on the sink</li><li>Simple to install and replace</li><li>Visible rim around the sink edge</li></ul></div></article></div><p class="compare-note">Want flush mount, or another way? Ask your installer first. <a href="https://m.me/">Send us a photo of your counter ↗</a></p></div></section>
-<section class="workstation"><div class="workstation-image"><img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=90" alt="Kitchen workstation"></div><div class="workstation-copy"><div class="eyebrow light-eyebrow">MORE THAN JUST A SINK</div><h2>What is a<br><em>workstation sink?</em></h2><p>A sink with a built-in ledge. Fit it with custom accessories and turn your sink into a practical prep station.</p><div class="steps"><div><b>01</b><span><strong>Wash</strong><small>Room for your largest pots and pans.</small></span></div><div><b>02</b><span><strong>Cut</strong><small>Chop on the board. Scraps go straight in.</small></span></div><div><b>03</b><span><strong>Drain</strong><small>Let plates and vegetables drip dry over the sink.</small></span></div></div><RouterLink to="/collections/all" class="btn gold">Explore workstation sinks <ArrowRight/></RouterLink></div></section>
-<section class="section container"><div class="section-heading"><div><div class="eyebrow">THE YUWO COLLECTION</div><h2>Find the right sink<br>for your kitchen.</h2></div><RouterLink to="/collections/all" class="text-link">View all products <ArrowRight/></RouterLink></div><div class="product-grid"> <ProductCard v-for="p in featured" :key="p.id" :product="p"/></div></section>
-<section class="pro-banner"><div><div class="eyebrow light-eyebrow">FOR CONTRACTORS & DESIGNERS</div><h2>Sinks your clients<br>will love.</h2><p>Small or big projects, we're your partner from quote to after-sales.</p><RouterLink to="/pages/for-professionals" class="btn gold">Get project pricing <ArrowRight/></RouterLink></div><div class="pro-points"><span><Check/> Project pricing for 3 or more sets</span><span><Check/> Spec sheet and cutting template</span><span><Check/> Reserve stock for your timeline</span><span><Check/> Lifetime after-sales support</span></div></section>
-<section class="section container"><div class="section-heading"><div><div class="eyebrow">LEARN BEFORE YOU BUY</div><h2>Guides for your kitchen.</h2></div><RouterLink to="/blogs/articles" class="text-link">See all articles <ArrowRight/></RouterLink></div><div class="article-grid"><RouterLink v-for="a in articles.slice(0,3)" :key="a.title" to="/blogs/articles" class="article-card"><img :src="a.image" :alt="a.title"><div><small>{{a.type}} · {{a.read}}</small><h3>{{a.title}}</h3><p>{{a.excerpt}}</p><span class="text-link">Read article →</span></div></RouterLink></div></section>
-<section class="section faq-section"><div class="container faq-layout"><div><div class="eyebrow">GOOD TO KNOW</div><h2>Common<br>questions.</h2><p>Need a little more help? We're happy to guide you.</p><RouterLink to="/pages/contact" class="text-link">Talk to our team <ArrowRight/></RouterLink></div><FAQ :items="faqs.slice(0,6)"/></div></section>
-<section class="closing-cta"><div class="eyebrow light-eyebrow">LET'S FIND YOUR PERFECT FIT</div><h2>A better kitchen<br>starts at the sink.</h2><p>Tell us about your kitchen. We'll help you choose the right one.</p><div><RouterLink to="/collections/all" class="btn gold">Shop all sinks <ArrowRight/></RouterLink><a href="tel:+639985412344" class="btn ghost">Call 0998 541 2344</a></div></section></template>
+
+<script setup>
+import { RouterLink } from 'vue-router'
+import {
+  ArrowRight,
+  ShieldCheck,
+  Truck,
+  HeartHandshake,
+  Ruler,
+  Check
+} from 'lucide-vue-next'
+
+import ProductCard from '../components/ProductCard.vue'
+import FAQ from '../components/FAQ.vue'
+
+import { products, articles, faqs } from '../data/store'
+
+const featured = products.slice(0, 4)
+
+const reviews = [
+  [
+    '“Salamat. Ganda ng sink e. Lakas makamayaman.”',
+    'Contractor from Isabela'
+  ],
+  [
+    '“Ang ganda po ng sink and faucet, high quality ❤️”',
+    'Homeowner, Joan from Metro Manila'
+  ],
+  [
+    '“Sobrang ganda pang yayamanin hehe sisipagin ka talaga maghugas.”',
+    'Homeowner, Darwin from Bacoor Cavite'
+  ]
+]
+</script>
+
+<template>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow light-eyebrow">
+        <span></span>
+        MADE FOR FILIPINO FAMILIES
+      </div>
+
+      <h1>
+        Perfect for your<br />
+        <em>dream kitchen.</em>
+      </h1>
+
+      <p>
+        Thoughtfully designed workstation sinks that make every kitchen feel
+        more spacious, functional and beautiful.
+      </p>
+
+      <div class="hero-actions">
+        <RouterLink to="/collections/all" class="btn gold">
+          Shop sink sets
+          <ArrowRight :size="17" />
+        </RouterLink>
+
+        <a href="https://m.me/" class="btn ghost">
+          Ask us on Messenger
+        </a>
+      </div>
+
+      <div class="hero-trust">
+        <span>
+          <Check />
+          Real 304 stainless steel
+        </span>
+
+        <span>
+          <Check />
+          Anti-scratch finish
+        </span>
+
+        <span>
+          <Check />
+          Lifetime after-sales support
+        </span>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <img
+        src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=90"
+        alt="Modern kitchen with stainless sink"
+      />
+
+      <div class="hero-stamp">
+        <b>YUWO</b>
+        <span>EUROPEAN TECHNOLOGY</span>
+        <small>Quality for everyday living</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Strip -->
+  <section class="trust-strip">
+    <div>
+      <ShieldCheck />
+      <b>Real 304 stainless steel</b>
+      <small>Brand-new quality material</small>
+    </div>
+
+    <div>
+      <Ruler />
+      <b>Made to fit your space</b>
+      <small>Multiple sizes available</small>
+    </div>
+
+    <div>
+      <Truck />
+      <b>Nationwide delivery</b>
+      <small>We confirm your delivery fee</small>
+    </div>
+
+    <div>
+      <HeartHandshake />
+      <b>After-sales support</b>
+      <small>Here when you need us</small>
+    </div>
+  </section>
+
+  <!-- Customer Reviews -->
+  <section class="section container">
+    <div class="section-heading">
+      <div>
+        <div class="eyebrow">REAL KITCHENS, REAL CUSTOMERS</div>
+        <h2>
+          Made for the heart<br />
+          of your home.
+        </h2>
+      </div>
+
+      <p>
+        From the first rinse to the last dish, make everyday kitchen moments
+        a little better.
+      </p>
+    </div>
+
+    <div class="review-grid">
+      <article
+        v-for="(r, i) in reviews"
+        :key="r[1]"
+        class="review-card"
+      >
+        <div class="stars">★★★★★</div>
+
+        <blockquote>{{ r[0] }}</blockquote>
+
+        <small>{{ r[1] }}</small>
+
+        <span class="review-no">0{{ i + 1 }}</span>
+      </article>
+    </div>
+  </section>
+
+  <!-- Sink Comparison -->
+  <section class="section compare-section">
+    <div class="container">
+      <div class="center-heading">
+        <div class="eyebrow">FIND YOUR FIT</div>
+        <h2>Undermount or topmount?</h2>
+        <p>
+          Both are good choices. It depends on the look you like and your counter.
+        </p>
+      </div>
+
+      <div class="compare-grid">
+        <article>
+          <img
+            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85"
+            alt="Undermount kitchen sink"
+          />
+
+          <div>
+            <span class="eyebrow">CLEAN & SEAMLESS</span>
+
+            <h3>Undermount</h3>
+
+            <p>
+              The sink sits under the counter for a smooth, uninterrupted look.
+            </p>
+
+            <ul>
+              <li>Wipe crumbs straight into the sink</li>
+              <li>Clean, seamless counter edge</li>
+              <li>Countertop needs a fitted cut-out</li>
+            </ul>
+          </div>
+        </article>
+
+        <article>
+          <img
+            src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1000&q=85"
+            alt="Topmount kitchen sink"
+          />
+
+          <div>
+            <span class="eyebrow">EASY & PRACTICAL</span>
+
+            <h3>Topmount</h3>
+
+            <p>
+              The sink sits on top of the counter for a classic, practical fit.
+            </p>
+
+            <ul>
+              <li>Faucet and soap holes on the sink</li>
+              <li>Simple to install and replace</li>
+              <li>Visible rim around the sink edge</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+
+      <p class="compare-note">
+        Want flush mount, or another way? Ask your installer first.
+        <a href="https://m.me/">
+          Send us a photo of your counter ↗
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Workstation Sink -->
+  <section class="workstation">
+    <div class="workstation-image">
+      <img
+        src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=90"
+        alt="Kitchen workstation"
+      />
+    </div>
+
+    <div class="workstation-copy">
+      <div class="eyebrow light-eyebrow">MORE THAN JUST A SINK</div>
+
+      <h2>
+        What is a<br />
+        <em>workstation sink?</em>
+      </h2>
+
+      <p>
+        A sink with a built-in ledge. Fit it with custom accessories and turn
+        your sink into a practical prep station.
+      </p>
+
+      <div class="steps">
+        <div>
+          <b>01</b>
+          <span>
+            <strong>Wash</strong>
+            <small>Room for your largest pots and pans.</small>
+          </span>
+        </div>
+
+        <div>
+          <b>02</b>
+          <span>
+            <strong>Cut</strong>
+            <small>Chop on the board. Scraps go straight in.</small>
+          </span>
+        </div>
+
+        <div>
+          <b>03</b>
+          <span>
+            <strong>Drain</strong>
+            <small>Let plates and vegetables drip dry over the sink.</small>
+          </span>
+        </div>
+      </div>
+
+      <RouterLink to="/collections/all" class="btn gold">
+        Explore workstation sinks
+        <ArrowRight />
+      </RouterLink>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="section container">
+    <div class="section-heading">
+      <div>
+        <div class="eyebrow">THE YUWO COLLECTION</div>
+        <h2>
+          Find the right sink<br />
+          for your kitchen.
+        </h2>
+      </div>
+
+      <RouterLink to="/collections/all" class="text-link">
+        View all products
+        <ArrowRight />
+      </RouterLink>
+    </div>
+
+    <div class="product-grid">
+      <ProductCard
+        v-for="p in featured"
+        :key="p.id"
+        :product="p"
+      />
+    </div>
+  </section>
+
+  <!-- Professionals Banner -->
+  <section class="pro-banner">
+    <div>
+      <div class="eyebrow light-eyebrow">
+        FOR CONTRACTORS & DESIGNERS
+      </div>
+
+      <h2>
+        Sinks your clients<br />
+        will love.
+      </h2>
+
+      <p>
+        Small or big projects, we're your partner from quote to after-sales.
+      </p>
+
+      <RouterLink to="/pages/for-professionals" class="btn gold">
+        Get project pricing
+        <ArrowRight />
+      </RouterLink>
+    </div>
+
+    <div class="pro-points">
+      <span>
+        <Check />
+        Project pricing for 3 or more sets
+      </span>
+
+      <span>
+        <Check />
+        Spec sheet and cutting template
+      </span>
+
+      <span>
+        <Check />
+        Reserve stock for your timeline
+      </span>
+
+      <span>
+        <Check />
+        Lifetime after-sales support
+      </span>
+    </div>
+  </section>
+
+  <!-- Articles -->
+  <section class="section container">
+    <div class="section-heading">
+      <div>
+        <div class="eyebrow">LEARN BEFORE YOU BUY</div>
+        <h2>Guides for your kitchen.</h2>
+      </div>
+
+      <RouterLink to="/blogs/articles" class="text-link">
+        See all articles
+        <ArrowRight />
+      </RouterLink>
+    </div>
+
+    <div class="article-grid">
+      <RouterLink
+        v-for="a in articles.slice(0, 3)"
+        :key="a.title"
+        to="/blogs/articles"
+        class="article-card"
+      >
+        <img :src="a.image" :alt="a.title" />
+
+        <div>
+          <small>{{ a.type }} · {{ a.read }}</small>
+
+          <h3>{{ a.title }}</h3>
+
+          <p>{{ a.excerpt }}</p>
+
+          <span class="text-link">Read article →</span>
+        </div>
+      </RouterLink>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section faq-section">
+    <div class="container faq-layout">
+      <div>
+        <div class="eyebrow">GOOD TO KNOW</div>
+
+        <h2>
+          Common<br />
+          questions.
+        </h2>
+
+        <p>
+          Need a little more help? We're happy to guide you.
+        </p>
+
+        <RouterLink to="/pages/contact" class="text-link">
+          Talk to our team
+          <ArrowRight />
+        </RouterLink>
+      </div>
+
+      <FAQ :items="faqs.slice(0, 6)" />
+    </div>
+  </section>
+
+  <!-- Closing CTA -->
+  <section class="closing-cta">
+    <div class="eyebrow light-eyebrow">
+      LET'S FIND YOUR PERFECT FIT
+    </div>
+
+    <h2>
+      A better kitchen<br />
+      starts at the sink.
+    </h2>
+
+    <p>
+      Tell us about your kitchen. We'll help you choose the right one.
+    </p>
+
+    <div>
+      <RouterLink to="/collections/all" class="btn gold">
+        Shop all sinks
+        <ArrowRight />
+      </RouterLink>
+
+      <a href="tel:+639985412344" class="btn ghost">
+        Call 0998 541 2344
+      </a>
+    </div>
+  </section>
+</template>
