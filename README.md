@@ -1,4 +1,4 @@
-# YUWO Philippines — Vue 3 storefront recreation
+# YUWO Philippines
 
 A developer-ready, responsive Vue 3 + Vite recreation of the publicly visible YUWO Philippines storefront. The project reproduces the site's main information architecture and product-shopping flow while keeping product content editable in one data file.
 
