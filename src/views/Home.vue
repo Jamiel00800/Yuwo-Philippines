@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { ArrowRight, ShieldCheck, Truck, HeartHandshake, Ruler, Check } from 'lucide-vue-next'
 import ProductCard from '../components/ProductCard.vue'

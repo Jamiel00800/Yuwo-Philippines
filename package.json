@@ -9,7 +9,10 @@
     "preview": "vite preview --host 0.0.0.0"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.119.2",
+    "@tailwindcss/vite": "^4.3.5",
     "lucide-vue-next": "latest",
+    "tailwindcss": "^4.3.5",
     "vite": "latest",
     "vue": "latest",
     "vue-router": "latest"
