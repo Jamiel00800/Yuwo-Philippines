@@ -206,7 +206,7 @@ onMounted(loadProducts)
             </div>
             <div class="border-t border-yuwo-line pt-4">
               <label class="block text-[10px] font-bold">Primary product image<input type="file" accept="image/*" @change="chooseImage" class="mt-2 block w-full text-[10px] file:mr-3 file:border-0 file:bg-yuwo-soft file:px-3 file:py-2 file:text-[10px] file:font-bold"></label>
-              <img v-if="imagePreview" :src="imagePreview" alt="Product preview" class="mt-3 h-36 w-full bg-[#f4f4f3] object-contain">
+              <img v-if="imagePreview" :src="imagePreview" alt="Product preview" class="mt-3 aspect-[4/3] w-full bg-[#f4f4f3] object-contain p-3">
               <p class="mt-2 text-[9px] text-yuwo-muted">Image uploads use the Supabase Storage bucket named product-images. Maximum file size: 8 MB.</p>
             </div>
             <div class="grid grid-cols-2 gap-3">
