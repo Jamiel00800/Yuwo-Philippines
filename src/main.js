@@ -1,4 +1,3 @@
-
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { supabase } from './lib/supabase'
@@ -10,6 +9,8 @@ import Product from './views/Product.vue'
 import Articles from './views/Articles.vue'
 import Professionals from './views/Professionals.vue'
 import Contact from './views/Contact.vue'
+import AdminLogin from './views/AdminLogin.vue'
+import AdminDashboard from './views/AdminDashboard.vue'
 
 import './style.css'
 
@@ -23,22 +24,34 @@ const router = createRouter({
     { path: '/blogs/articles', component: Articles },
     { path: '/pages/for-professionals', component: Professionals },
     { path: '/pages/contact', component: Contact },
+    { path: '/admin/login', component: AdminLogin },
+    { path: '/admin', component: AdminDashboard, meta: { requiresAdmin: true } },
     { path: '/:pathMatch(.*)*', redirect: '/' }
   ]
 })
 
-// Temporary Supabase connection test
-supabase
-  .from('products')
-  .select('id')
-  .limit(1)
-  .then(({ data, error }) => {
-    if (error) {
-      console.error('Database connection failed:', error.message)
-    } else {
-      console.log('Database connection successful!', data)
-    }
-  })
+router.beforeEach(async to => {
+  if (!to.meta.requiresAdmin) return true
+  if (!supabase) return { path: '/admin/login', query: { reason: 'config' } }
+
+  const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+  if (sessionError || !session) {
+    return { path: '/admin/login', query: { redirect: to.fullPath } }
+  }
+
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', session.user.id)
+    .maybeSingle()
+
+  if (profileError || !profile || !['owner', 'admin', 'editor'].includes(profile.role)) {
+    await supabase.auth.signOut()
+    return { path: '/admin/login', query: { reason: 'unauthorized' } }
+  }
+
+  return true
+})
 
 createApp(App)
   .use(router)
