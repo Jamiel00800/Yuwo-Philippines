@@ -56,44 +56,21 @@ async function signOut() {
       </p>
 
       <section class="mt-9 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <article
-          v-for="item in [
-            {
-              title: 'Products',
-              detail:
-                'Manage product names, prices, variants, images and availability.',
-              status: 'Next module',
-            },
-            {
-              title: 'Reviews',
-              detail: 'Review and publish customer testimonials.',
-              status: 'Planned',
-            },
-            {
-              title: 'Articles',
-              detail: 'Create and update kitchen guides and blog posts.',
-              status: 'Planned',
-            },
-            {
-              title: 'FAQs',
-              detail: 'Update common customer questions and answers.',
-              status: 'Planned',
-            },
-            {
-              title: 'Homepage content',
-              detail:
-                'Manage banners, featured products and homepage sections.',
-              status: 'Planned',
-            },
-            {
-              title: 'Admin users',
-              detail: 'Manage access for owners, admins and editors.',
-              status: 'Owner only · planned',
-            },
-          ]"
-          :key="item.title"
-          class="border border-yuwo-line bg-white p-6"
-        >
+        <RouterLink to="/admin/products" class="border border-yuwo-line bg-white p-6 transition hover:border-yuwo-gold hover:shadow-sm">
+          <div class="flex items-start justify-between gap-3">
+            <h2 class="font-display text-xl font-bold text-yuwo-ink">Products</h2>
+            <span class="shrink-0 bg-[#edf7ef] px-2 py-1 text-[9px] font-bold uppercase tracking-wide text-green-700">Manage now</span>
+          </div>
+          <p class="mt-3 text-xs leading-6 text-yuwo-muted">Create, edit, publish and archive products, manage variants and upload product images.</p>
+          <p class="mt-5 text-[10px] font-bold text-yuwo-navy">Open product management →</p>
+        </RouterLink>
+        <article v-for="item in [
+          { title: 'Reviews', detail: 'Review and publish customer testimonials.', status: 'Planned' },
+          { title: 'Articles', detail: 'Create and update kitchen guides and blog posts.', status: 'Planned' },
+          { title: 'FAQs', detail: 'Update common customer questions and answers.', status: 'Planned' },
+          { title: 'Homepage content', detail: 'Manage banners, featured products and homepage sections.', status: 'Planned' },
+          { title: 'Admin users', detail: 'Manage access for owners, admins and editors.', status: 'Owner only · planned' }
+        ]" :key="item.title" class="border border-yuwo-line bg-white p-6">
           <div class="flex items-start justify-between gap-3">
             <h2 class="font-display text-xl font-bold text-yuwo-ink">
               {{ item.title }}
@@ -108,12 +85,8 @@ async function signOut() {
           </p>
         </article>
       </section>
-      <p
-        class="mt-8 border-l-2 border-yuwo-gold bg-white px-5 py-4 text-xs leading-6 text-yuwo-muted"
-      >
-        Access is protected by Supabase Auth and the admin role stored in the
-        profiles table. Content editing will be enabled module by module after
-        the database schema is installed.
+      <p class="mt-8 border-l-2 border-yuwo-gold bg-white px-5 py-4 text-xs leading-6 text-yuwo-muted">
+        Access is protected by Supabase Auth and your existing role-based database policies. Product changes are saved to your existing Supabase catalog.
       </p>
     </main>
   </div>

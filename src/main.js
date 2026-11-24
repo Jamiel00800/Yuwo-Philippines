@@ -11,6 +11,7 @@ import Professionals from './views/Professionals.vue'
 import Contact from './views/Contact.vue'
 import AdminLogin from './views/AdminLogin.vue'
 import AdminDashboard from './views/AdminDashboard.vue'
+import AdminProducts from './views/AdminProducts.vue'
 
 import './style.css'
 
@@ -26,6 +27,7 @@ const router = createRouter({
     { path: '/pages/contact', component: Contact },
     { path: '/admin/login', component: AdminLogin },
     { path: '/admin', component: AdminDashboard, meta: { requiresAdmin: true } },
+    { path: '/admin/products', component: AdminProducts, meta: { requiresAdmin: true } },
     { path: '/:pathMatch(.*)*', redirect: '/' }
   ]
 })
