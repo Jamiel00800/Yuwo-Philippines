@@ -13,8 +13,10 @@ const notice = ref('')
 const search = ref('')
 const statusFilter = ref('all')
 const editingId = ref(null)
-const imageFile = ref(null)
-const imagePreview = ref('')
+const imageFiles = ref([])
+const imagePreviews = ref([])
+const existingImages = ref([])
+const removedImageIds = ref([])
 const form = ref(blankForm())
 
 function blankForm() {
@@ -40,8 +42,10 @@ async function loadProducts() {
 function openNew() {
   editingId.value = null
   form.value = blankForm()
-  imageFile.value = null
-  imagePreview.value = ''
+  imageFiles.value = []
+  imagePreviews.value = []
+  existingImages.value = []
+  removedImageIds.value = []
   error.value = ''
   notice.value = ''
 }
@@ -54,9 +58,10 @@ function editProduct(product) {
     tag: product.tag || '', is_featured: Boolean(product.is_featured), status: product.status || 'draft',
     variants: product.product_variants.map(v => ({ id: v.id, variant_name: v.variant_name || '', sku: v.sku || '', price: v.price ?? '', compare_at_price: v.compare_at_price ?? '', size: v.size || '', is_available: v.is_available !== false }))
   }
-  const primary = product.product_images.find(image => image.is_primary) || product.product_images[0]
-  imagePreview.value = primary?.image_url || ''
-  imageFile.value = null
+  existingImages.value = [...product.product_images].sort((x, y) => (x.display_order ?? 0) - (y.display_order ?? 0))
+  imageFiles.value = []
+  imagePreviews.value = []
+  removedImageIds.value = []
   error.value = ''
   notice.value = ''
   window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -65,27 +70,58 @@ function addVariant() {
   form.value.variants.push({ variant_name: '', sku: '', price: form.value.price || '', compare_at_price: form.value.compare_at_price || '', size: form.value.size || '', is_available: true })
 }
 function removeVariant(index) { form.value.variants.splice(index, 1) }
-function chooseImage(event) {
-  const file = event.target.files?.[0]
-  if (!file) return
-  if (!file.type.startsWith('image/')) { error.value = 'Please choose an image file.'; return }
-  if (file.size > 8 * 1024 * 1024) { error.value = 'Image must be 8 MB or smaller.'; return }
-  imageFile.value = file
-  imagePreview.value = URL.createObjectURL(file)
+function chooseImages(event) {
+  error.value = ''
+  const selectedFiles = Array.from(event.target.files || [])
+  const availableSlots = 5 - existingImages.value.length - imageFiles.value.length
+  if (selectedFiles.length > availableSlots) {
+    error.value = `You can add only ${Math.max(0, availableSlots)} more image(s). A product can have up to 5 images.`
+    event.target.value = ''
+    return
+  }
+  const invalid = selectedFiles.find(file => !file.type.startsWith('image/') || file.size > 8 * 1024 * 1024)
+  if (invalid) {
+    error.value = invalid.size > 8 * 1024 * 1024 ? 'Each image must be 8 MB or smaller.' : 'Please choose image files only.'
+    event.target.value = ''
+    return
+  }
+  imageFiles.value.push(...selectedFiles)
+  imagePreviews.value.push(...selectedFiles.map(file => URL.createObjectURL(file)))
+  event.target.value = ''
 }
-async function uploadProductImage(productId) {
-  if (!imageFile.value) return
+function removeNewImage(index) {
+  URL.revokeObjectURL(imagePreviews.value[index])
+  imageFiles.value.splice(index, 1)
+  imagePreviews.value.splice(index, 1)
+}
+function removeExistingImage(image) {
+  removedImageIds.value.push(image.id)
+  existingImages.value = existingImages.value.filter(item => item.id !== image.id)
+}
+async function uploadProductImages(productId) {
+  if (!imageFiles.value.length) return
   uploading.value = true
-  const extension = imageFile.value.name.split('.').pop()?.toLowerCase() || 'jpg'
-  const path = `${productId}/${Date.now()}.${extension}`
-  const { error: uploadError } = await supabase.storage.from('product-images').upload(path, imageFile.value, { upsert: true, contentType: imageFile.value.type })
-  if (uploadError) { uploading.value = false; throw new Error(uploadError.message) }
-  const { data } = supabase.storage.from('product-images').getPublicUrl(path)
-  const { error: resetPrimaryError } = await supabase.from('product_images').update({ is_primary: false }).eq('product_id', productId)
-  if (resetPrimaryError) { uploading.value = false; throw new Error(resetPrimaryError.message) }
-  const { error: imageError } = await supabase.from('product_images').insert({ product_id: productId, image_url: data.publicUrl, alt_text: form.value.name, is_primary: true, display_order: 0 })
-  uploading.value = false
-  if (imageError) throw new Error(imageError.message)
+  try {
+    const uploadedRows = []
+    for (const [index, file] of imageFiles.value.entries()) {
+      const extension = file.name.split('.').pop()?.toLowerCase() || 'jpg'
+      const path = `${productId}/${Date.now()}-${index}.${extension}`
+      const { error: uploadError } = await supabase.storage.from('product-images').upload(path, file, { upsert: true, contentType: file.type })
+      if (uploadError) throw new Error(uploadError.message)
+      const { data } = supabase.storage.from('product-images').getPublicUrl(path)
+      uploadedRows.push({
+        product_id: productId,
+        image_url: data.publicUrl,
+        alt_text: form.value.name,
+        is_primary: existingImages.value.length === 0 && index === 0,
+        display_order: existingImages.value.length + index
+      })
+    }
+    const { error: insertError } = await supabase.from('product_images').insert(uploadedRows)
+    if (insertError) throw new Error(insertError.message)
+  } finally {
+    uploading.value = false
+  }
 }
 async function saveProduct() {
   error.value = ''
@@ -117,8 +153,12 @@ async function saveProduct() {
     const { error: variantError } = await supabase.from('product_variants').insert(variants)
     if (variantError) { error.value = variantError.message; saving.value = false; return }
   }
+  if (removedImageIds.value.length) {
+    const { error: removeError } = await supabase.from('product_images').delete().in('id', removedImageIds.value)
+    if (removeError) { error.value = removeError.message; saving.value = false; return }
+  }
   try {
-    await uploadProductImage(productId)
+    await uploadProductImages(productId)
   } catch (uploadError) {
     error.value = `Product saved, but image upload failed: ${uploadError.message}`
     saving.value = false
@@ -205,9 +245,21 @@ onMounted(loadProducts)
               </div>
             </div>
             <div class="border-t border-yuwo-line pt-4">
-              <label class="block text-[10px] font-bold">Primary product image<input type="file" accept="image/*" @change="chooseImage" class="mt-2 block w-full text-[10px] file:mr-3 file:border-0 file:bg-yuwo-soft file:px-3 file:py-2 file:text-[10px] file:font-bold"></label>
-              <img v-if="imagePreview" :src="imagePreview" alt="Product preview" class="mt-3 aspect-[4/3] w-full bg-[#f4f4f3] object-contain p-3">
-              <p class="mt-2 text-[9px] text-yuwo-muted">Image uploads use the Supabase Storage bucket named product-images. Maximum file size: 8 MB.</p>
+              <label class="block text-[10px] font-bold">Product gallery (up to 5 images)<input type="file" accept="image/*" multiple @change="chooseImages" :disabled="existingImages.length + imageFiles.length >= 5" class="mt-2 block w-full text-[10px] file:mr-3 file:border-0 file:bg-yuwo-soft file:px-3 file:py-2 file:text-[10px] file:font-bold"></label>
+              <p class="mt-2 text-[9px] text-yuwo-muted">{{ existingImages.length + imageFiles.length }} / 5 images selected. The first image is the main product image.</p>
+              <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                <div v-for="image in existingImages" :key="image.id" class="relative">
+                  <img :src="image.image_url" :alt="image.alt_text || form.name" class="aspect-[4/3] w-full bg-[#f4f4f3] object-contain p-2">
+                  <span v-if="image.is_primary" class="absolute bottom-1 left-1 bg-yuwo-navy px-2 py-1 text-[8px] font-bold text-white">MAIN</span>
+                  <button type="button" @click="removeExistingImage(image)" class="absolute right-1 top-1 bg-white px-2 py-1 text-[10px] font-bold text-red-600 shadow">×</button>
+                </div>
+                <div v-for="(preview, index) in imagePreviews" :key="preview" class="relative">
+                  <img :src="preview" alt="New product image preview" class="aspect-[4/3] w-full bg-[#f4f4f3] object-contain p-2">
+                  <span v-if="existingImages.length === 0 && index === 0" class="absolute bottom-1 left-1 bg-yuwo-navy px-2 py-1 text-[8px] font-bold text-white">MAIN</span>
+                  <button type="button" @click="removeNewImage(index)" class="absolute right-1 top-1 bg-white px-2 py-1 text-[10px] font-bold text-red-600 shadow">×</button>
+                </div>
+              </div>
+              <p class="mt-2 text-[9px] text-yuwo-muted">Images are stored in Supabase Storage. Maximum 8 MB per image.</p>
             </div>
             <div class="grid grid-cols-2 gap-3">
               <label class="block text-[10px] font-bold">Status<select v-model="form.status" class="mt-2 w-full border border-yuwo-line bg-white px-3 py-3 text-xs"><option value="draft">Draft</option><option value="published">Published</option><option value="archived">Archived</option></select></label>
