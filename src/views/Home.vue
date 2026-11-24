@@ -4,7 +4,7 @@ import { RouterLink } from 'vue-router'
 import { ArrowRight, ShieldCheck, Truck, HeartHandshake, Ruler, Check } from 'lucide-vue-next'
 import ProductCard from '../components/ProductCard.vue'
 import { supabase } from '../lib/supabase'
-import { fetchPublishedProducts } from '../lib/catalog'
+import { mapProduct } from '../lib/catalog'
 
 const featured = ref([])
 const reviews = ref([])
@@ -22,7 +22,6 @@ async function loadFeaturedProducts() {
       .order('created_at', { ascending: false })
       .limit(4)
     if (error) throw error
-    const { mapProduct } = await import('../lib/catalog')
     featured.value = (data || []).map(mapProduct)
   } catch (error) {
     console.error('Unable to load featured products:', error.message)
