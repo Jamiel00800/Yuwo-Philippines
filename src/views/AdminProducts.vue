@@ -81,6 +81,8 @@ async function uploadProductImage(productId) {
   const { error: uploadError } = await supabase.storage.from('product-images').upload(path, imageFile.value, { upsert: true, contentType: imageFile.value.type })
   if (uploadError) { uploading.value = false; throw new Error(uploadError.message) }
   const { data } = supabase.storage.from('product-images').getPublicUrl(path)
+  const { error: resetPrimaryError } = await supabase.from('product_images').update({ is_primary: false }).eq('product_id', productId)
+  if (resetPrimaryError) { uploading.value = false; throw new Error(resetPrimaryError.message) }
   const { error: imageError } = await supabase.from('product_images').insert({ product_id: productId, image_url: data.publicUrl, alt_text: form.value.name, is_primary: true, display_order: 0 })
   uploading.value = false
   if (imageError) throw new Error(imageError.message)
@@ -124,8 +126,9 @@ async function saveProduct() {
     return
   }
   saving.value = false
-  notice.value = editingId.value ? 'Product updated successfully.' : 'Product created successfully.'
+  const successMessage = editingId.value ? 'Product updated successfully.' : 'Product created successfully.'
   openNew()
+  notice.value = successMessage
   await loadProducts()
 }
 async function deleteProduct(product) {
