@@ -35,8 +35,15 @@ async function signOut() {
       <p class="mt-3 max-w-2xl text-sm leading-6 text-yuwo-muted">Your storefront management workspace. Choose a section to manage the content customers see on the website.</p>
 
       <section class="mt-9 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <RouterLink to="/admin/products" class="border border-yuwo-line bg-white p-6 transition hover:border-yuwo-gold hover:shadow-sm">
+          <div class="flex items-start justify-between gap-3">
+            <h2 class="font-display text-xl font-bold text-yuwo-ink">Products</h2>
+            <span class="shrink-0 bg-[#edf7ef] px-2 py-1 text-[9px] font-bold uppercase tracking-wide text-green-700">Manage now</span>
+          </div>
+          <p class="mt-3 text-xs leading-6 text-yuwo-muted">Create, edit, publish and archive products, manage variants and upload product images.</p>
+          <p class="mt-5 text-[10px] font-bold text-yuwo-navy">Open product management →</p>
+        </RouterLink>
         <article v-for="item in [
-          { title: 'Products', detail: 'Manage product names, prices, variants, images and availability.', status: 'Next module' },
           { title: 'Reviews', detail: 'Review and publish customer testimonials.', status: 'Planned' },
           { title: 'Articles', detail: 'Create and update kitchen guides and blog posts.', status: 'Planned' },
           { title: 'FAQs', detail: 'Update common customer questions and answers.', status: 'Planned' },
@@ -51,7 +58,7 @@ async function signOut() {
         </article>
       </section>
       <p class="mt-8 border-l-2 border-yuwo-gold bg-white px-5 py-4 text-xs leading-6 text-yuwo-muted">
-        Access is protected by Supabase Auth and the admin role stored in the profiles table. Content editing will be enabled module by module after the database schema is installed.
+        Access is protected by Supabase Auth and your existing role-based database policies. Product changes are saved to your existing Supabase catalog.
       </p>
     </main>
   </div>
