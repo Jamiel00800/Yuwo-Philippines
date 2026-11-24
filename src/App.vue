@@ -1,8 +1,10 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRoute } from 'vue-router'
 import { ShoppingBag, Menu, X, Phone, Trash2, Plus, Minus } from 'lucide-vue-next'
 import { products, money } from './data/store'
+const route = useRoute()
+const isAdminRoute = computed(() => route.path.startsWith('/admin'))
 const menu = ref(false), cartOpen = ref(false)
 const cart = ref(JSON.parse(localStorage.getItem('yuwo-cart') || '[]'))
 watch(cart, value => localStorage.setItem('yuwo-cart', JSON.stringify(value)), { deep: true })
@@ -23,6 +25,8 @@ function checkout() {
 }
 </script>
 <template>
+  <RouterView v-if="isAdminRoute" />
+  <template v-else>
   <div class="flex flex-wrap items-center justify-center gap-x-2 bg-yuwo-navy px-3 py-2 text-center text-[10px] font-semibold tracking-wide text-white sm:text-xs">Nationwide Delivery <span class="text-yuwo-gold">·</span> Real 304 Stainless Steel <span class="text-yuwo-gold">·</span> Call or text <a href="tel:+639985412344" class="underline underline-offset-2">0998 541 2344</a></div>
   <header class="sticky top-0 z-40 border-b border-yuwo-line bg-white/95 backdrop-blur">
     <div class="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-4 px-5 lg:px-8">
