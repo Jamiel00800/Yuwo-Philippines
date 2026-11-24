@@ -1,141 +1,15 @@
-
 <script setup>
 import { ref } from 'vue'
-
-const form = ref({
-  name: '',
-  phone: '',
-  email: '',
-  message: ''
-})
-
+const form = ref({name:'',phone:'',email:'',message:''})
 function submit() {
-  const m = encodeURIComponent(
-    `Hello YUWO, I have an inquiry.
-Name: ${form.value.name}
-Phone: ${form.value.phone}
-Email: ${form.value.email}
-Message: ${form.value.message}`
-  )
-
-  window.open(
-    `https://wa.me/639985412344?text=${m}`,
-    '_blank'
-  )
+ const m=encodeURIComponent(`Hello YUWO, I have an inquiry.\nName: ${form.value.name}\nPhone: ${form.value.phone}\nEmail: ${form.value.email}\nMessage: ${form.value.message}`)
+ window.open(`https://wa.me/639985412344?text=${m}`,'_blank')
 }
 </script>
-
 <template>
-  <section class="page-hero">
-    <div class="eyebrow light-eyebrow">WE'RE HERE TO HELP</div>
-
-    <h1>
-      Let's talk<br />
-      <em>about your kitchen.</em>
-    </h1>
-
-    <p>
-      From choosing the right size to planning installation, kasama mo kami.
-    </p>
-  </section>
-
-  <section class="container contact-page">
-    <div class="contact-info">
-      <div class="eyebrow">GET IN TOUCH</div>
-
-      <h2>
-        Need help choosing<br />
-        your sink?
-      </h2>
-
-      <p>
-        Tell us what you're planning. Our team can help you find the right size
-        and set.
-      </p>
-
-      <a href="tel:+639985412344" class="contact-row">
-        <span>PHONE / TEXT</span>
-        <b>0998 541 2344</b>
-      </a>
-
-      <a href="mailto:yuwophilippines@gmail.com" class="contact-row">
-        <span>EMAIL</span>
-        <b>yuwophilippines@gmail.com</b>
-      </a>
-
-      <a href="https://m.me/" class="contact-row">
-        <span>MESSENGER</span>
-        <b>Chat with YUWO ↗</b>
-      </a>
-
-      <div class="showroom-card">
-        <div class="eyebrow">VISIT OUR SHOWROOM</div>
-
-        <b>
-          B14 L21 Acacia St., Vista Verde South, Bacoor, Cavite
-        </b>
-
-        <p>
-          Monday to Saturday<br />
-          11:00 AM – 5:00 PM
-        </p>
-
-        <a
-          href="https://maps.google.com/?q=B14+L21+Acacia+St+Vista+Verde+South+Bacoor+Cavite"
-          target="_blank"
-        >
-          Get directions ↗
-        </a>
-      </div>
-    </div>
-
-    <form class="contact-form" @submit.prevent="submit">
-      <h3>Send us a message</h3>
-
-      <label>
-        Your name
-        <input
-          v-model="form.name"
-          required
-          placeholder="Full name"
-        />
-      </label>
-
-      <label>
-        Phone number
-        <input
-          v-model="form.phone"
-          required
-          placeholder="09XX XXX XXXX"
-        />
-      </label>
-
-      <label>
-        Email address
-        <input
-          v-model="form.email"
-          type="email"
-          placeholder="you@example.com"
-        />
-      </label>
-
-      <label>
-        How can we help?
-        <textarea
-          v-model="form.message"
-          rows="5"
-          required
-          placeholder="Tell us what you need..."
-        ></textarea>
-      </label>
-
-      <button class="btn primary full">
-        Continue to WhatsApp →
-      </button>
-
-      <small>
-        You'll be able to review your message before sending.
-      </small>
-    </form>
-  </section>
+<section class="bg-yuwo-navy px-6 py-16 text-white lg:px-8 lg:py-20"><div class="mx-auto max-w-7xl"><div class="mb-4 text-[10px] font-bold tracking-[.18em] text-yuwo-gold">WE'RE HERE TO HELP</div><h1 class="font-display text-4xl font-extrabold leading-tight tracking-[-.05em] sm:text-6xl">Let's talk<br><em class="font-medium">about your kitchen.</em></h1><p class="mt-5 max-w-xl text-sm leading-7 text-blue-100">From choosing the right size to planning installation, kasama mo kami.</p></div></section>
+<section class="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:py-20 md:grid-cols-2 lg:gap-20 lg:px-8"><div><div class="text-[10px] font-bold tracking-[.18em] text-[#a17c20]">GET IN TOUCH</div><h2 class="mt-3 font-display text-3xl font-bold leading-tight">Need help choosing<br>your sink?</h2><p class="mt-4 max-w-md text-xs leading-7 text-yuwo-muted">Tell us what you're planning. Our team can help you find the right size and set.</p>
+<a href="tel:+639985412344" class="flex flex-col gap-2 border-b border-yuwo-line py-5"><span class="text-[9px] font-bold tracking-widest text-[#a17c20]">PHONE / TEXT</span><b class="text-sm">0998 541 2344</b></a><a href="mailto:yuwophilippines@gmail.com" class="flex flex-col gap-2 border-b border-yuwo-line py-5"><span class="text-[9px] font-bold tracking-widest text-[#a17c20]">EMAIL</span><b class="text-sm">yuwophilippines@gmail.com</b></a><a href="https://m.me/" class="flex flex-col gap-2 border-b border-yuwo-line py-5"><span class="text-[9px] font-bold tracking-widest text-[#a17c20]">MESSENGER</span><b class="text-sm">Chat with YUWO ↗</b></a>
+<div class="mt-6 bg-yuwo-soft p-6"><div class="text-[10px] font-bold tracking-widest text-[#a17c20]">VISIT OUR SHOWROOM</div><b class="mt-3 block text-sm leading-6">B14 L21 Acacia St., Vista Verde South, Bacoor, Cavite</b><p class="mt-3 text-xs leading-6 text-yuwo-muted">Monday to Saturday<br>11:00 AM – 5:00 PM</p><a class="mt-2 inline-block text-xs font-bold text-yuwo-navy" href="https://maps.google.com/?q=B14+L21+Acacia+St+Vista+Verde+South+Bacoor+Cavite" target="_blank">Get directions ↗</a></div></div>
+<form class="grid content-start gap-4 border border-yuwo-line p-6 sm:p-8" @submit.prevent="submit"><h3 class="font-display text-2xl font-bold">Send us a message</h3><label class="grid gap-2 text-[10px] font-bold">Your name<input v-model="form.name" required placeholder="Full name" class="border border-yuwo-line bg-white px-3 py-3 text-xs font-normal outline-yuwo-navy"></label><label class="grid gap-2 text-[10px] font-bold">Phone number<input v-model="form.phone" required placeholder="09XX XXX XXXX" class="border border-yuwo-line bg-white px-3 py-3 text-xs font-normal outline-yuwo-navy"></label><label class="grid gap-2 text-[10px] font-bold">Email address<input v-model="form.email" type="email" placeholder="you@example.com" class="border border-yuwo-line bg-white px-3 py-3 text-xs font-normal outline-yuwo-navy"></label><label class="grid gap-2 text-[10px] font-bold">How can we help?<textarea v-model="form.message" rows="5" required placeholder="Tell us what you need..." class="border border-yuwo-line bg-white px-3 py-3 text-xs font-normal outline-yuwo-navy"></textarea></label><button class="bg-yuwo-navy px-5 py-4 text-xs font-bold text-white hover:bg-yuwo-deep">Continue to WhatsApp →</button><small class="text-center text-[9px] text-yuwo-muted">You'll be able to review your message before sending.</small></form></section>
 </template>
