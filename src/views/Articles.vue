@@ -1,93 +1,11 @@
-
 <script setup>
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { articles } from '../data/store'
-
 const selected = ref(null)
 </script>
-
 <template>
-  <section class="page-hero">
-    <div class="eyebrow light-eyebrow">THE YUWO JOURNAL</div>
-
-    <h1>
-      Kitchen sink guides<br />
-      <em>& useful advice.</em>
-    </h1>
-
-    <p>
-      Simple, honest answers before you buy, from choosing the right size to
-      keeping your sink like new.
-    </p>
-  </section>
-
-  <section class="container article-page">
-    <div v-if="!selected" class="article-grid full-articles">
-      <button
-        v-for="a in articles"
-        :key="a.title"
-        class="article-card article-button"
-        @click="selected = a"
-      >
-        <img :src="a.image" :alt="a.title" />
-
-        <div>
-          <small>{{ a.type }} · {{ a.read }}</small>
-
-          <h3>{{ a.title }}</h3>
-
-          <p>{{ a.excerpt }}</p>
-
-          <span class="text-link">Read article →</span>
-        </div>
-      </button>
-    </div>
-
-    <article v-else class="article-reading">
-      <button class="text-link back-link" @click="selected = null">
-        ← Back to all guides
-      </button>
-
-      <div class="eyebrow">
-        {{ selected.type }} · {{ selected.read }}
-      </div>
-
-      <h1>{{ selected.title }}</h1>
-
-      <img :src="selected.image" :alt="selected.title" />
-
-      <p>{{ selected.excerpt }}</p>
-
-      <h2>Start with the space you have</h2>
-
-      <p>
-        Before choosing a kitchen sink, measure the inside width of your sink
-        cabinet and check the available countertop depth. The sink needs to fit
-        the cabinet opening, while the countertop cut-out must follow the
-        product template.
-      </p>
-
-      <h2>Choose the installation style</h2>
-
-      <p>
-        An undermount sink sits below the counter for a seamless edge. A
-        topmount sink rests on top of the counter and is often simpler to
-        replace. Discuss the countertop material and installation with your
-        contractor before ordering.
-      </p>
-
-      <h2>Plan ahead with your contractor</h2>
-
-      <p>
-        Choose your sink before the countertop is cut. Share the sink dimensions
-        and cutting template with your stone fabricator, and confirm the faucet
-        and plumbing requirements.
-      </p>
-
-      <RouterLink to="/collections/all" class="btn primary">
-        Explore YUWO sinks →
-      </RouterLink>
-    </article>
-  </section>
+<section class="bg-yuwo-navy px-6 py-16 text-white lg:px-8 lg:py-20"><div class="mx-auto max-w-7xl"><div class="mb-4 text-[10px] font-bold tracking-[.18em] text-yuwo-gold">THE YUWO JOURNAL</div><h1 class="font-display text-4xl font-extrabold leading-tight tracking-[-.05em] sm:text-6xl">Kitchen sink guides<br><em class="font-medium">& useful advice.</em></h1><p class="mt-5 max-w-xl text-sm leading-7 text-blue-100">Simple, honest answers before you buy, from choosing the right size to keeping your sink like new.</p></div></section>
+<section class="mx-auto max-w-7xl px-5 py-14 sm:py-20 lg:px-8"><div v-if="!selected" class="grid gap-6 md:grid-cols-2"><button v-for="a in articles" :key="a.title" class="group overflow-hidden border border-yuwo-line bg-white text-left" @click="selected=a"><img :src="a.image" :alt="a.title" class="h-52 w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"><div class="p-6"><small class="text-[9px] font-bold uppercase tracking-widest text-[#a17c20]">{{ a.type }} · {{ a.read }}</small><h3 class="mt-3 font-display text-lg font-bold leading-snug">{{ a.title }}</h3><p class="mt-3 text-xs leading-6 text-yuwo-muted">{{ a.excerpt }}</p><span class="mt-4 inline-block text-xs font-bold text-yuwo-navy">Read article →</span></div></button></div>
+<article v-else class="mx-auto max-w-3xl"><button class="mb-8 text-xs font-bold text-yuwo-navy" @click="selected=null">← Back to all guides</button><div class="text-[10px] font-bold uppercase tracking-widest text-[#a17c20]">{{ selected.type }} · {{ selected.read }}</div><h1 class="mt-3 font-display text-3xl font-extrabold leading-tight sm:text-4xl">{{ selected.title }}</h1><img :src="selected.image" :alt="selected.title" class="my-6 h-64 w-full object-cover sm:h-96"><p class="text-sm leading-8 text-yuwo-muted">{{ selected.excerpt }}</p><h2 class="mb-3 mt-8 font-display text-2xl font-bold">Start with the space you have</h2><p class="text-sm leading-8 text-yuwo-muted">Before choosing a kitchen sink, measure the inside width of your sink cabinet and check the available countertop depth. The sink needs to fit the cabinet opening, while the countertop cut-out must follow the product template.</p><h2 class="mb-3 mt-8 font-display text-2xl font-bold">Choose the installation style</h2><p class="text-sm leading-8 text-yuwo-muted">An undermount sink sits below the counter for a seamless edge. A topmount sink rests on top of the counter and is often simpler to replace. Discuss the countertop material and installation with your contractor before ordering.</p><h2 class="mb-3 mt-8 font-display text-2xl font-bold">Plan ahead with your contractor</h2><p class="text-sm leading-8 text-yuwo-muted">Choose your sink before the countertop is cut. Share the sink dimensions and cutting template with your stone fabricator, and confirm the faucet and plumbing requirements.</p><RouterLink to="/collections/all" class="mt-8 inline-block bg-yuwo-navy px-6 py-4 text-xs font-bold text-white">Explore YUWO sinks →</RouterLink></article></section>
 </template>
