@@ -1,8 +1,10 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRoute } from 'vue-router'
 import { ShoppingBag, Menu, X, Phone, Trash2, Plus, Minus } from 'lucide-vue-next'
 import { products, money } from './data/store'
+const route = useRoute()
+const isAdminRoute = computed(() => route.path.startsWith('/admin'))
 const menu = ref(false), cartOpen = ref(false)
 const cart = ref(JSON.parse(localStorage.getItem('yuwo-cart') || '[]'))
 watch(cart, value => localStorage.setItem('yuwo-cart', JSON.stringify(value)), { deep: true })
@@ -23,6 +25,8 @@ function checkout() {
 }
 </script>
 <template>
+  <RouterView v-if="isAdminRoute" />
+  <template v-else>
   <div class="flex flex-wrap items-center justify-center gap-x-2 bg-yuwo-navy px-3 py-2 text-center text-[10px] font-semibold tracking-wide text-white sm:text-xs">Nationwide Delivery <span class="text-yuwo-gold">·</span> Real 304 Stainless Steel <span class="text-yuwo-gold">·</span> Call or text <a href="tel:+639985412344" class="underline underline-offset-2">0998 541 2344</a></div>
   <header class="sticky top-0 z-40 border-b border-yuwo-line bg-white/95 backdrop-blur">
     <div class="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-4 px-5 lg:px-8">
@@ -47,4 +51,5 @@ function checkout() {
     <div v-else class="flex-1 overflow-auto"><div v-for="item in cart" :key="item.key" class="flex gap-4 border-b border-yuwo-line py-5"><img :src="item.image" :alt="item.name" class="h-[85px] w-[85px] object-cover"><div class="flex flex-1 flex-col items-start gap-1"><b class="text-xs">{{ item.name }}</b><small class="text-[10px] text-yuwo-muted">{{ item.variant }}</small><strong class="text-xs">{{ money(item.price) }}</strong><div class="mt-1 flex items-center gap-4 border border-yuwo-line px-3 py-2 text-xs"><button @click="change(item,-1)"><Minus :size="13"/></button>{{ item.qty }}<button @click="change(item,1)"><Plus :size="13"/></button></div></div><button @click="cart = cart.filter(x => x.key !== item.key)" aria-label="Remove item"><Trash2 :size="16"/></button></div></div>
     <div v-if="cart.length" class="border-t border-yuwo-line pt-5"><div class="flex justify-between text-sm"><span>Subtotal</span><b>{{ money(subtotal) }}</b></div><p class="my-3 text-[10px] text-yuwo-muted">No payment yet. We will confirm your order and delivery fee.</p><button class="w-full bg-yuwo-navy px-5 py-4 text-xs font-bold text-white" @click="checkout">Send order inquiry ↗</button><small class="mt-3 block text-center text-[10px] text-yuwo-muted">Checkout opens a WhatsApp inquiry. No online payment is collected.</small></div>
   </aside></div>
+  </template>
 </template>
