@@ -1,6 +1,8 @@
 
 <script setup>
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
+
 import {
   ArrowRight,
   ShieldCheck,
@@ -13,10 +15,26 @@ import {
 import ProductCard from '../components/ProductCard.vue'
 import FAQ from '../components/FAQ.vue'
 
-import { products, articles, faqs } from '../data/store'
+import { articles, faqs } from '../data/store'
 
-const featured = products.slice(0, 4)
+// Props received from App.vue
+const props = defineProps({
+  products: {
+    type: Array,
+    default: () => []
+  },
+  addToCart: {
+    type: Function,
+    required: true
+  }
+})
 
+// Featured products
+const featured = computed(() =>
+  props.products.slice(0, 4)
+)
+
+// Customer reviews
 const reviews = [
   [
     '“Salamat. Ganda ng sink e. Lakas makamayaman.”',
@@ -162,6 +180,7 @@ const reviews = [
       <div class="center-heading">
         <div class="eyebrow">FIND YOUR FIT</div>
         <h2>Undermount or topmount?</h2>
+
         <p>
           Both are good choices. It depends on the look you like and your counter.
         </p>
@@ -217,6 +236,7 @@ const reviews = [
 
       <p class="compare-note">
         Want flush mount, or another way? Ask your installer first.
+
         <a href="https://m.me/">
           Send us a photo of your counter ↗
         </a>
