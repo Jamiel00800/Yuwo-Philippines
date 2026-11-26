@@ -16,6 +16,7 @@ import AdminProducts from './views/AdminProducts.vue'
 import AdminFinance from './views/AdminFinance.vue'
 import AdminForms from './views/AdminForms.vue'
 import AdminUsers from './views/AdminUsers.vue'
+import AdminModulePlaceholder from './views/AdminModulePlaceholder.vue'
 
 import './style.css'
 
@@ -40,10 +41,10 @@ const router = createRouter({
         { path: 'forms', component: AdminForms, meta: { title: 'Forms & inquiries' } },
         { path: 'finance', component: AdminFinance, meta: { title: 'Financial overview', allowedRoles: ['owner', 'admin'] } },
         { path: 'users', component: AdminUsers, meta: { title: 'Users', allowedRoles: ['owner'] } },
-        { path: 'articles', redirect: '/admin' },
-        { path: 'reviews', redirect: '/admin' },
-        { path: 'faqs', redirect: '/admin' },
-        { path: 'homepage', redirect: '/admin' }
+        { path: 'articles', component: AdminModulePlaceholder, meta: { title: 'Articles', module: 'articles' } },
+        { path: 'reviews', component: AdminModulePlaceholder, meta: { title: 'Reviews', module: 'reviews' } },
+        { path: 'faqs', component: AdminModulePlaceholder, meta: { title: 'FAQs', module: 'faqs' } },
+        { path: 'homepage', component: AdminModulePlaceholder, meta: { title: 'Homepage content', module: 'homepage' } }
       ]
     },
     { path: '/:pathMatch(.*)*', redirect: '/' }
