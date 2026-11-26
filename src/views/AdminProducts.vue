@@ -185,7 +185,7 @@ onMounted(loadProducts)
 
 <template>
   <div class="min-h-screen bg-[#f5f6f7]">
-    <header class="border-b border-yuwo-line bg-white">
+    <header class="hidden">
       <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 lg:px-8">
         <RouterLink to="/admin" class="flex flex-col leading-none text-yuwo-navy"><span class="font-display text-2xl font-extrabold tracking-[-.08em]">YUWO</span><small class="mt-1 text-[8px] font-bold tracking-[.22em]">ADMINISTRATION</small></RouterLink>
         <RouterLink to="/admin" class="text-xs font-bold text-yuwo-navy hover:underline">← Dashboard</RouterLink>
