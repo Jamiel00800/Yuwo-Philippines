@@ -1,93 +1,26 @@
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { supabase } from "../lib/supabase";
-
-const router = useRouter();
-const signingOut = ref(false);
-async function signOut() {
-  signingOut.value = true;
-  if (supabase) await supabase.auth.signOut();
-  router.replace("/admin/login");
-}
+import { computed, onMounted, ref } from 'vue'
+import { RouterLink } from 'vue-router'
+import { Package, Star, FileText, Plus, ArrowUpRight, CircleAlert, ShoppingCart } from 'lucide-vue-next'
+import { supabase } from '../lib/supabase'
+const loading=ref(true),error=ref(''),products=ref([]),reviewCount=ref(0)
+const publishedCount=computed(()=>products.value.filter(p=>p.status==='published').length)
+const draftCount=computed(()=>products.value.filter(p=>p.status==='draft').length)
+const categoryCounts=computed(()=>{const counts={};products.value.forEach(p=>{const key=p.category||'Uncategorized';counts[key]=(counts[key]||0)+1});return Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5)})
+const featured=computed(()=>products.value.filter(p=>p.is_featured&&p.status==='published').slice(0,5))
+const fmt=n=>new Intl.NumberFormat('en-PH').format(n)
+onMounted(async()=>{if(!supabase){error.value='Supabase is not configured.';loading.value=false;return}const [p,r]=await Promise.all([supabase.from('products').select('id,name,category,status,is_featured,created_at').order('created_at',{ascending:false}),supabase.from('reviews').select('id',{count:'exact',head:true})]);if(p.error)error.value=p.error.message;else products.value=p.data||[];reviewCount.value=r.count||0;loading.value=false})
 </script>
-
 <template>
-  <div class="min-h-screen bg-[#f5f6f7]">
-    <header class="border-b border-yuwo-line bg-white">
-      <div
-        class="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 lg:px-8"
-      >
-        <RouterLink to="/" class="flex flex-col leading-none text-yuwo-navy">
-          <span class="font-display text-2xl font-extrabold tracking-[-.08em]"
-            >YUWO</span
-          >
-          <small class="mt-1 text-[8px] font-bold tracking-[.22em]"
-            >ADMINISTRATION</small
-          >
-        </RouterLink>
-        <div class="flex items-center gap-4">
-          <span class="hidden text-xs font-semibold text-yuwo-muted sm:inline"
-            >Admin workspace</span
-          >
-          <button
-            @click="signOut"
-            :disabled="signingOut"
-            class="border border-yuwo-line px-4 py-2 text-xs font-bold text-yuwo-navy disabled:opacity-50"
-          >
-            {{ signingOut ? "Signing out…" : "Sign out" }}
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <main class="mx-auto max-w-7xl px-5 py-10 lg:px-8 lg:py-14">
-      <p class="text-[10px] font-bold tracking-[.18em] text-[#a17c20]">
-        YUWO PHILIPPINES
-      </p>
-      <h1
-        class="mt-2 font-display text-3xl font-extrabold text-yuwo-ink sm:text-4xl"
-      >
-        Admin dashboard
-      </h1>
-      <p class="mt-3 max-w-2xl text-sm leading-6 text-yuwo-muted">
-        Your storefront management workspace. Choose a section to manage the
-        content customers see on the website.
-      </p>
-
-      <section class="mt-9 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <RouterLink to="/admin/products" class="border border-yuwo-line bg-white p-6 transition hover:border-yuwo-gold hover:shadow-sm">
-          <div class="flex items-start justify-between gap-3">
-            <h2 class="font-display text-xl font-bold text-yuwo-ink">Products</h2>
-            <span class="shrink-0 bg-[#edf7ef] px-2 py-1 text-[9px] font-bold uppercase tracking-wide text-green-700">Manage now</span>
-          </div>
-          <p class="mt-3 text-xs leading-6 text-yuwo-muted">Create, edit, publish and archive products, manage variants and upload product images.</p>
-          <p class="mt-5 text-[10px] font-bold text-yuwo-navy">Open product management →</p>
-        </RouterLink>
-        <article v-for="item in [
-          { title: 'Reviews', detail: 'Review and publish customer testimonials.', status: 'Planned' },
-          { title: 'Articles', detail: 'Create and update kitchen guides and blog posts.', status: 'Planned' },
-          { title: 'FAQs', detail: 'Update common customer questions and answers.', status: 'Planned' },
-          { title: 'Homepage content', detail: 'Manage banners, featured products and homepage sections.', status: 'Planned' },
-          { title: 'Admin users', detail: 'Manage access for owners, admins and editors.', status: 'Owner only · planned' }
-        ]" :key="item.title" class="border border-yuwo-line bg-white p-6">
-          <div class="flex items-start justify-between gap-3">
-            <h2 class="font-display text-xl font-bold text-yuwo-ink">
-              {{ item.title }}
-            </h2>
-            <span
-              class="shrink-0 bg-[#f5f6f7] px-2 py-1 text-[9px] font-bold uppercase tracking-wide text-yuwo-muted"
-              >{{ item.status }}</span
-            >
-          </div>
-          <p class="mt-3 text-xs leading-6 text-yuwo-muted">
-            {{ item.detail }}
-          </p>
-        </article>
-      </section>
-      <p class="mt-8 border-l-2 border-yuwo-gold bg-white px-5 py-4 text-xs leading-6 text-yuwo-muted">
-        Access is protected by Supabase Auth and your existing role-based database policies. Product changes are saved to your existing Supabase catalog.
-      </p>
-    </main>
-  </div>
+<div><div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p class="text-[10px] font-bold uppercase tracking-[.18em] text-[#a17c20]">Store management</p><h1 class="mt-2 font-display text-3xl font-extrabold text-[#263341]">Dashboard</h1><p class="mt-2 text-sm text-slate-500">Your catalog and storefront content at a glance.</p></div><RouterLink to="/admin/products" class="inline-flex items-center justify-center gap-2 rounded-lg bg-[#092f70] px-4 py-3 text-xs font-bold text-white"><Plus :size="15"/>Add product</RouterLink></div>
+<div v-if="error" class="mt-6 rounded-lg border border-red-200 bg-red-50 p-4 text-xs text-red-700">{{error}}</div>
+<div v-if="loading" class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4"><div v-for="n in 4" :key="n" class="h-28 animate-pulse rounded-xl bg-white"/></div>
+<div v-else class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+<article v-for="card in [{label:'Total products',value:fmt(products.length),detail:'All catalog items',icon:Package,tone:'blue'},{label:'Published products',value:fmt(publishedCount),detail:'Visible on storefront',icon:Package,tone:'green'},{label:'Draft products',value:fmt(draftCount),detail:'Not visible to customers',icon:FileText,tone:'amber'},{label:'Customer reviews',value:fmt(reviewCount),detail:'Reviews in CMS',icon:Star,tone:'violet'}]" :key="card.label" class="rounded-xl border border-[#e8edf3] bg-white p-5 shadow-sm"><div class="flex items-center justify-between"><span class="text-xs font-medium text-slate-500">{{card.label}}</span><span class="flex h-10 w-10 items-center justify-center rounded-xl" :class="{'bg-blue-50 text-blue-700':card.tone==='blue','bg-emerald-50 text-emerald-700':card.tone==='green','bg-amber-50 text-amber-700':card.tone==='amber','bg-violet-50 text-violet-700':card.tone==='violet'}"><component :is="card.icon" :size="19"/></span></div><p class="mt-4 font-display text-3xl font-extrabold text-[#102d55]">{{card.value}}</p><p class="mt-1 text-[10px] text-slate-400">{{card.detail}}</p></article>
+</div>
+<section class="mt-6 rounded-xl border border-[#e8edf3] bg-white p-5 shadow-sm sm:p-6"><h2 class="font-display text-lg font-bold">Quick actions</h2><p class="mt-1 text-xs text-slate-500">Shortcuts to common store management tasks.</p><div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><RouterLink v-for="item in [{label:'Add a product',to:'/admin/products',icon:Plus},{label:'Manage articles',to:'/admin/articles',icon:FileText},{label:'Customer reviews',to:'/admin/reviews',icon:Star},{label:'View inquiries',to:'/admin/forms',icon:CircleAlert}]" :key="item.label" :to="item.to" class="flex items-center gap-3 rounded-lg border border-[#e8edf3] p-4 text-xs font-semibold text-[#092f70] hover:border-[#c99e35]"><component :is="item.icon" :size="17"/>{{item.label}}<ArrowUpRight :size="14" class="ml-auto text-slate-400"/></RouterLink></div></section>
+<div class="mt-6 grid gap-6 xl:grid-cols-2"><section class="rounded-xl border border-[#e8edf3] bg-white p-5 sm:p-6"><h2 class="font-display text-lg font-bold">Catalog overview</h2><p class="mt-1 text-xs text-slate-500">Product distribution by category.</p><div v-if="!categoryCounts.length" class="py-10 text-center text-xs text-slate-400">No products have been added yet.</div><div v-else class="mt-5 space-y-4"><div v-for="[name,count] in categoryCounts" :key="name"><div class="mb-2 flex justify-between text-xs"><span class="font-medium">{{name}}</span><span class="text-slate-500">{{count}} products</span></div><div class="h-2 overflow-hidden rounded-full bg-slate-100"><div class="h-full rounded-full bg-[#174b91]" :style="{width:(products.length?count/products.length*100:0)+'%'}"/></div></div></div></section>
+<section class="rounded-xl border border-[#e8edf3] bg-white p-5 sm:p-6"><div class="flex items-center justify-between"><div><h2 class="font-display text-lg font-bold">Featured products</h2><p class="mt-1 text-xs text-slate-500">Published products highlighted on the storefront.</p></div><RouterLink to="/admin/products" class="text-[10px] font-bold text-[#092f70]">Manage →</RouterLink></div><div v-if="!featured.length" class="py-10 text-center text-xs text-slate-400">No featured products published yet.</div><div v-else class="mt-4 divide-y divide-slate-100"><div v-for="product in featured" :key="product.id" class="flex items-center justify-between gap-3 py-3"><span class="truncate text-xs font-semibold">{{product.name}}</span><span class="rounded-full bg-emerald-50 px-2 py-1 text-[9px] font-bold text-emerald-700">Published</span></div></div></section></div>
+<section class="mt-6 rounded-xl border border-dashed border-slate-300 bg-[#f9fbfd] p-5 sm:p-6"><div class="flex items-start gap-3"><span class="rounded-lg bg-amber-50 p-2 text-amber-700"><ShoppingCart :size="18"/></span><div><h2 class="font-display text-base font-bold">Sales and order analytics — coming next</h2><p class="mt-1 max-w-3xl text-xs leading-6 text-slate-500">Checkout currently sends inquiries through WhatsApp and does not save confirmed orders or completed sales in Supabase. Once order tracking is added, this area can show units sold, order trends, order status, and top-selling products using real data.</p></div></div></section>
+</div>
 </template>
