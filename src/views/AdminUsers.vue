@@ -62,7 +62,7 @@ async function saveRole(user){
   savingId.value=null
   await loadUsers()
 }
-onMounted(load)
+onMounted(loadUsers)
 </script>
 
 <template>
@@ -115,7 +115,7 @@ onMounted(load)
     <div class="flex items-center gap-2"><Users :size="18" class="text-[#092f70]"/><h2 class="font-display text-lg font-bold">Role permissions</h2></div>
     <p class="mt-1 text-xs text-slate-500">Current access rules in the YUWO CMS.</p>
     <div class="mt-5 overflow-x-auto"><table class="w-full min-w-[650px] text-left text-xs"><thead class="bg-slate-50 text-[9px] uppercase tracking-wide text-slate-500"><tr><th class="px-4 py-3">Permission</th><th class="px-4 py-3">Super Admin</th><th class="px-4 py-3">Admin</th><th class="px-4 py-3">Editor</th></tr></thead><tbody class="divide-y divide-slate-100">
-      <tr v-for="row in [{label:'Dashboard',values:[true,true,true]},{label:'Manage products, articles, reviews, FAQs and homepage content',values:[true,true,true]},{label:'View and manage website inquiries',values:[true,true,true]},{label:'Financial overview',values:[true,true,false]},{label:'Invite users and change user roles',values:[true,false,false]},{label:'Assign Super Admin access',values:[true,false,false]}]" :key="row.label"><td class="px-4 py-3 font-medium text-slate-700">{{row.label}}</td><td v-for="(allowed,index) in row.values" :key="index" class="px-4 py-3"><Check v-if="allowed" :size="16" class="text-emerald-600"/><span v-else class="text-slate-300">—</span></td></tr>
+      <tr v-for="row in [{label:'Dashboard',values:[true,true,true]},{label:'Manage products, articles, reviews, FAQs and homepage content',values:[true,true,true]},{label:'View and manage website inquiries',values:[true,true,true]},{label:'Financial overview',values:[true,true,false]},{label:'Create users and change user roles',values:[true,false,false]},{label:'Assign Super Admin access',values:[true,false,false]}]" :key="row.label"><td class="px-4 py-3 font-medium text-slate-700">{{row.label}}</td><td v-for="(allowed,index) in row.values" :key="index" class="px-4 py-3"><Check v-if="allowed" :size="16" class="text-emerald-600"/><span v-else class="text-slate-300">—</span></td></tr>
     </tbody></table></div>
     <p class="mt-4 text-[10px] leading-5 text-slate-500">Editors can manage CMS content, but cannot access financial reporting or user administration. Admins have the same content permissions plus financial overview access. Only Super Admin can manage accounts.</p>
   </section>
